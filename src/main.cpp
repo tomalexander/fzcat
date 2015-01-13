@@ -44,7 +44,8 @@ void print(std::vector<std::future<std::unique_ptr<std::stringstream> > > & resu
 int main(int argc, char** argv)
 {
     size_t buffer_size = std::max(2048, std::min(getpagesize(), 16384));
-    std::vector<std::future<std::unique_ptr<std::stringstream> > > results(argc - 1);
+    std::vector<std::future<std::unique_ptr<std::stringstream> > > results;
+    results.reserve(argc - 1);
     for (int i = 1; i < argc; ++i)
     {
         results.push_back(std::async(std::launch::async, full_file, buffer_size, argv[i]));

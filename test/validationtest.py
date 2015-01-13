@@ -28,7 +28,6 @@ def cat_command(cmd):
         m = hashlib.md5()
         command = [cmd]
         command.extend(all_files)
-        print(command)
         p = Popen(command, stdout=PIPE, stdin=None, stderr=None)
         while True:
             inp = p.stdout.read(8192)
@@ -40,6 +39,13 @@ def cat_command(cmd):
 fzcat = cat_command("./fzcat")
 zcat = cat_command("/bin/zcat")
 
-dprint("zcat", zcat())
+zcat_out = zcat()
+print("zcat", zcat_out)
 
-dprint("fzcat", fzcat())
+fzcat_out = fzcat()
+print("fzcat", fzcat_out)
+
+if zcat_out != fzcat_out:
+    print("DOES NOT MATCH", file=sys.stderr)
+    sys.exit(1)
+
