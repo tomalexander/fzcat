@@ -8,6 +8,8 @@
 #include <unistd.h>
 #include "decompressor.h"
 
+#define NUM_THREADS 4
+
 /**
  * Decompress a full file at path using buffer_size bytes for a buffer
  */
@@ -46,7 +48,7 @@ int main(int argc, char** argv)
     for (int i = 1; i < argc; ++i)
     {
         results.push_back(std::async(std::launch::async, full_file, buffer_size, argv[i]));
-        if (i % 4 == 0)
+        if (i % NUM_THREADS == 0)
         {
             print(results);
             results.clear();

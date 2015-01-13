@@ -16,3 +16,8 @@ You will need a C++ compiler that support C++14. I'd highly recommend the latest
   premake4 gmake
   make config=static
 #+END_SRC
+
+* Usage
+#+BEGIN_SRC sh
+  fzcat [<file1> [<file2> [<file3>...] ] ]
+#+END_SRC
