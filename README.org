@@ -1,15 +1,29 @@
 * fzcat
 Fast zcat with [[http://linux.die.net/man/3/mmap][mmap]] and [[https://code.google.com/p/miniz/][miniz]]
 
-The goal of this project is to release a program that behaves like zcat but faster for multiple files.
+I coincidentally noticed that using mmap, miniz, and C++11 threads together I can zcat multiple files faster than pigz so I decided to release the code separately for those who may benefit from it.
 
 * How is it faster
 First, miniz is a blazing fast implementation of zlib. Second, instead of using [[http://linux.die.net/man/3/open][open]] and [[http://linux.die.net/man/3/read][read]] we use [[http://linux.die.net/man/3/mmap][mmap]] and pipe that directly into miniz. Then we take the output written to a buffer and write it directly to stdout. This reduces the number of times the memory is copied around, increasing the performance.
 
 * How fast is it
-
+Running against 189 files of about 20MB each
+#+BEGIN_SRC text
+  Warming up by catting all files to /dev/null
+  zcat 107.95278143882751
+  parallel_zcat 42.61844491958618
+  pigz 55.39036321640015
+  parallel_pigz 42.56399941444397
+  fzcat 28.799103498458862
+  Running again but dropping cache between runs
+  zcat 109.37209343910217
+  parallel_zcat 43.26405954360962
+  pigz 58.75359654426575
+  parallel_pigz 43.09493350982666
+  fzcat 31.75873327255249
+#+END_SRC
 * When is it not faster
-
+When decompressing a single file. In that instance, my per-file threading doesn't apply and pigz wins
 * Compiling
 You will need a C++ compiler that support C++14. I'd highly recommend the latest version of [[http://clang.llvm.org/][Clang]].
 #+BEGIN_SRC sh

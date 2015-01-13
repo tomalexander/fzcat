@@ -30,7 +30,7 @@ def cat():
     end = time.time()
     return end-start
 
-def fzcat(buffer_size):
+def fzcat():
     command = ["./fzcat"]
     command.extend(all_files)
     start = time.time()
@@ -62,6 +62,14 @@ def parallel_zcat():
     end = time.time()
     return end-start
 
+def parallel_pigz():
+    command = ["/bin/parallel", "-k", "--no-notice", "/bin/pigz", "-dc", ":::"]
+    command.extend(all_files)
+    start = time.time()
+    call(command, stdout=DEVNULL)
+    end = time.time()
+    return end-start
+
 def drop_cache():
     with open("/proc/sys/vm/drop_caches", "w") as f:
         f.write("3")
@@ -75,6 +83,8 @@ dprint("parallel_zcat", parallel_zcat())
 
 dprint("pigz", pigz())
 
+dprint("parallel_pigz", parallel_zcat())
+
 dprint("fzcat", fzcat())
 
 dprint("Running again but dropping cache between runs")
@@ -87,6 +97,9 @@ dprint("parallel_zcat", parallel_zcat())
 
 drop_cache()
 dprint("pigz", pigz())
+
+drop_cache()
+dprint("parallel_pigz", parallel_zcat())
 
 drop_cache()
 dprint("fzcat", fzcat())
