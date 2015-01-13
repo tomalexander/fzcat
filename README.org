@@ -1,0 +1,18 @@
+* fzcat
+Fast zcat with [[http://linux.die.net/man/3/mmap][mmap]] and [[https://code.google.com/p/miniz/][miniz]]
+
+The goal of this project is to release a program that behaves like zcat but faster for multiple files.
+
+* How is it faster
+First, miniz is a blazing fast implementation of zlib. Second, instead of using [[http://linux.die.net/man/3/open][open]] and [[http://linux.die.net/man/3/read][read]] we use [[http://linux.die.net/man/3/mmap][mmap]] and pipe that directly into miniz. Then we take the output written to a buffer and write it directly to stdout. This reduces the number of times the memory is copied around, increasing the performance.
+
+* How fast is it
+
+* When is it not faster
+
+* Compiling
+You will need a C++ compiler that support C++14. I'd highly recommend the latest version of [[http://clang.llvm.org/][Clang]].
+#+BEGIN_SRC sh
+  premake4 gmake
+  make config=static
+#+END_SRC
