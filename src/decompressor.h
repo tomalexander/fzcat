@@ -31,7 +31,7 @@ class decompressor
 
     size_t file_size = 0;
     size_t remaining = 0;
-    unsigned char* mapped_data = nullptr;
-    unsigned char* read_head = nullptr;
+    unsigned char* read_buffer = nullptr;
+    unsigned char* back_buffer = nullptr;
     mz_stream_s* stream = nullptr;
 };
